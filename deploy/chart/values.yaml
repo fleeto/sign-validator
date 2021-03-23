@@ -1,0 +1,18 @@
+shellOperator:
+  image: dustise/cosign-validator:v0.8.2
+  # Important: this name should be the same as in gen-certs.sh and csr.json.
+  validatingWebhookServiceName: cosign-validator
+  validatingWebhookConfigurationName: cosign-validator
+
+webHook:
+  config:
+    namespace:
+      labelSelector:
+        matchLabels:
+          signed: "required"
+    rules:
+    - apiGroups:   ["apps"]
+      apiVersions: ["v1"]
+      operations:  ["CREATE", "UPDATE"]
+      resources:   ["deployments"]
+      scope:       "Namespaced"

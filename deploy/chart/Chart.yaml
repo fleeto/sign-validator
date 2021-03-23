@@ -1,0 +1,4 @@
+apiVersion: v1
+name: cosign-validator
+version: 1.0.0
+description: Validating image with cosign and shell-operator

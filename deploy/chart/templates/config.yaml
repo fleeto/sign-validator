@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cosign-validator
+data:
+  config.yaml: |
+    configVersion: v1
+    kubernetesValidating:
+    - name: cosign-validator.yamler.io
+{{ toYaml .Values.webHook.config | indent 6 }}

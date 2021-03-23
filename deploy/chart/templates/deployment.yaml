@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cosign-validator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: cosign-validator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cosign-validator
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cosign-validator
+    spec:
+      containers:
+      - name: shell-operator
+        image: {{ .Values.shellOperator.image | quote }}
+        env:
+        - name: SHELL_OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: VALIDATING_WEBHOOK_SERVICE_NAME
+          value: {{ .Values.shellOperator.validatingWebhookServiceName | quote }}
+        - name: VALIDATING_WEBHOOK_CONFIGURATION_NAME
+          value: {{ .Values.shellOperator.validatingWebhookConfigurationName | quote }}
+        volumeMounts:
+        - name: validating-certs
+          mountPath: /validating-certs/
+          readOnly: true
+        - name: config
+          mountPath: /etc/cosign-validator/
+        - name: keys
+          mountPath: /etc/cosign-keys/
+      serviceAccountName: cosign-validator
+      volumes:
+      - name: validating-certs
+        secret:
+          secretName: cosign-validator
+      - name: config
+        configMap:
+          name: cosign-validator
+      - name: keys
+        secret:
+          secretName: cosign-keys
