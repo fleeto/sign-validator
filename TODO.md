@@ -1,3 +1,3 @@
 # TODO
 
-1. 修改名字
+Verify images with the public key name stored in the annotations.
