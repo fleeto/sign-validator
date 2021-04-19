@@ -1,4 +1,4 @@
-# Copy labels to pods from nodes
+# Validating images with cosign and shell operator
 
 Built with [Shell Operator](https://github.com/flant/shell-operator)
 
